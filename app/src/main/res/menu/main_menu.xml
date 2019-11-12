@@ -32,6 +32,10 @@
             android:title="@string/block_session" />
 
         <item
+            android:id="@+id/video_button"
+            android:icon="@drawable/ic_menu_logout"
+            android:title="VIDEO PLACEHOLDER" />
+        <item
             android:id="@+id/logout_button"
             android:icon="@drawable/ic_menu_logout"
             android:title="@string/log_out" />
