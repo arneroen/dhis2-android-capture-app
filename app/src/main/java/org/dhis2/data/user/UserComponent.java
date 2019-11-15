@@ -63,6 +63,8 @@ import org.dhis2.usescases.teiDashboard.nfc_data.NfcDataWriteComponent;
 import org.dhis2.usescases.teiDashboard.nfc_data.NfcDataWriteModule;
 import org.dhis2.usescases.teiDashboard.teiProgramList.TeiProgramListComponent;
 import org.dhis2.usescases.teiDashboard.teiProgramList.TeiProgramListModule;
+import org.dhis2.usescases.videoLibrary.VideoComponent;
+import org.dhis2.usescases.videoLibrary.VideoModule;
 import org.dhis2.utils.optionset.OptionSetComponent;
 import org.dhis2.utils.optionset.OptionSetModule;
 
@@ -115,6 +117,9 @@ public interface UserComponent {
 
     @NonNull
     AboutComponent plus(AboutModule aboutModule);
+
+    @NonNull
+    VideoComponent plus(VideoModule videoModule);
 
     @NonNull
     DataSetDetailComponent plus(DataSetDetailModule dataSetDetailModel);

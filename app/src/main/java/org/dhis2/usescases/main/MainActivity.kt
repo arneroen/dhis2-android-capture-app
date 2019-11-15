@@ -33,7 +33,7 @@ import org.dhis2.usescases.main.program.ProgramFragment
 import org.dhis2.usescases.qrReader.QrReaderFragment
 import org.dhis2.usescases.settings.SyncManagerFragment
 import org.dhis2.usescases.teiDashboard.nfc_data.NfcDataWriteActivity
-import org.dhis2.usescases.video.VideoActivity
+import org.dhis2.usescases.videoLibrary.VideoFragment
 import org.dhis2.utils.Constants
 import org.dhis2.utils.DateUtils
 import org.dhis2.utils.analytics.BLOCK_SESSION
@@ -251,8 +251,9 @@ class MainActivity : ActivityGlobalAbstract(), MainView, ExporterListener {
                 onLockClick()
             }
             R.id.video_button -> {
-                val intentVideo = Intent(this, VideoActivity::class.java)
-                startActivity(intentVideo)
+                activeFragment = VideoFragment()
+                tag = "Video test"
+                binding.filter.visibility = View.GONE
             }
             R.id.logout_button -> {
                 analyticsHelper.setEvent(CLOSE_SESSION, CLICK, CLOSE_SESSION)

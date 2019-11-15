@@ -596,4 +596,7 @@
     <string name="filter_period_other">Other</string>
     <string name="filter_period_any">Anytime</string>
     <string name="data_values_error_sync_message">Sync failed. Sync failed. Check the data values to try to fix the problem and try again. If it keeps failing contact your system administrator</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

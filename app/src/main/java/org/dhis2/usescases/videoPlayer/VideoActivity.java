@@ -1,4 +1,4 @@
-package org.dhis2.usescases.video;
+package org.dhis2.usescases.videoPlayer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
