@@ -305,7 +305,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
 
-
     //CRASHLYTICS
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true
