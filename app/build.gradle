@@ -378,6 +378,9 @@ dependencies {
     /*region SECURITY*/
     implementation 'com.scottyab:rootbeer-lib:0.0.7'
 
+    //annotationProcessor for room, since there's also kotlin.
+    kapt 'android.arch.persistence.room:compiler:1.1.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
