@@ -50,4 +50,8 @@ public class StoredVideoEntity {
     public String getDescription() { return description; }
 
     public int getVersion() { return version; }
+
+    public void setFileName(String fileName) { this.fileName = fileName; }
+
+    public void setUid(String uid) { this.uid = uid; }
 }

@@ -16,4 +16,7 @@ public interface StoredVideoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(StoredVideoEntity storedVideoEntity);
+
+    @Query("DELETE FROM storedvideoentity")
+    void deleteAll();
 }
