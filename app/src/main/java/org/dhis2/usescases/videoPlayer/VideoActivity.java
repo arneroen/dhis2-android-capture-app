@@ -28,10 +28,12 @@ public class VideoActivity extends AppCompatActivity {
 
     private static final String VIDEO_SAMPLE = "tacoma_narrows";
     private VideoView mVideoView;
+    private String videoFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.videoFileName = getIntent().getExtras().getString("fileName");
         setContentView(R.layout.activity_video);
         mVideoView = findViewById(R.id.videoview);
         MediaController controller = new MediaController(this);
@@ -64,7 +66,8 @@ public class VideoActivity extends AppCompatActivity {
                 "/raw/" + mediaName);
     }
     private void initializePlayer() {
-        String fileName;
+        String fileName = this.videoFileName;
+        /*String fileName;
         try {
             List<StoredVideoEntity> videos = (List<StoredVideoEntity>) new VideoDatabaseClient(this, 0).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
             fileName = videos.get(0).getFileName();
@@ -74,7 +77,7 @@ public class VideoActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
             fileName = "test9.mp4";
-        }
+        }*/
         File file = new File(getExternalFilesDir(null).getAbsolutePath() + "/" + fileName);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PERMISSION_GRANTED){
