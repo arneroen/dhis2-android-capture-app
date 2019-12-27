@@ -24,7 +24,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
@@ -47,16 +49,20 @@ public class VideoDownloadWorker extends Worker {
         try {
             URL videoListUrl = new URL(server + "/videos");
             List<StoredVideoEntity> videos = getAllVideosToDownload(videoListUrl);
-            downloadVideos(server, videos);
+            List<StoredVideoEntity> videosToDownload = getVideosToDownload(videos);
+            downloadVideos(server, videosToDownload);
             return Result.success();
 
         } catch (MalformedURLException ex) {
             ex.printStackTrace();
-            return Result.failure();
         } catch (IOException ex) {
             ex.printStackTrace();
-            return Result.failure();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
+        return Result.failure();
     }
 
     private void downloadVideo(URL url, String fileName) throws IOException {
@@ -126,6 +132,19 @@ public class VideoDownloadWorker extends Worker {
         Type listType = new TypeToken<List<StoredVideoEntity>>(){}.getType();
         List<StoredVideoEntity> videos = gson.fromJson(reader, listType);
         return videos;
+    }
+
+    private List<StoredVideoEntity> getVideosToDownload(List<StoredVideoEntity> videos) throws ExecutionException, InterruptedException {
+        List<StoredVideoEntity> storedVideos = (List<StoredVideoEntity>) new VideoDatabaseClient(getApplicationContext(), 0).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
+
+        List<StoredVideoEntity> videosToDownload = new ArrayList<>();
+
+        for (StoredVideoEntity video : videos) {
+            if (!storedVideos.contains(video)){
+                videosToDownload.add(video);
+            }
+        }
+        return videosToDownload;
     }
 
     private void downloadVideos(String server, List<StoredVideoEntity> videos) throws IOException {
