@@ -50,4 +50,14 @@ public class StoredVideoEntity {
     public String getDescription() { return description; }
 
     public int getVersion() { return version; }
+
+    public void setFileName(String fileName) { this.fileName = fileName; }
+
+    public void setUid(String uid) { this.uid = uid; }
+
+    @Override
+    public boolean equals(Object other){
+        if (!(other instanceof StoredVideoEntity)) return false;
+        return (this.uid.equals(((StoredVideoEntity) other).getUid()) && this.version == ((StoredVideoEntity) other).getVersion());
+    }
 }

@@ -41,6 +41,9 @@ public class VideoDatabaseClient extends AsyncTask<Object, Void, Object> {
                 VideoDatabaseInstance.getInstance(context).getVideoDatabase()
                         .storedVideoDao().insert(videoEntity);
                 break;
+            case 2: //delete all entries
+                VideoDatabaseInstance.getInstance(context).getVideoDatabase()
+                        .storedVideoDao().deleteAll();
             default:
                 break;
         }
