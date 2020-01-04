@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -24,6 +26,7 @@ import org.dhis2.databinding.FragmentVideoBinding;
 import org.dhis2.usescases.general.FragmentGlobalAbstract;
 import org.dhis2.usescases.videoPlayer.VideoActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -35,11 +38,12 @@ public class VideoFragment extends FragmentGlobalAbstract implements VideoContra
     VideoContracts.VideoPresenter presenter;
 
     private FragmentVideoBinding videoBinding;
+    private VideoListAdapter videoListAdapter;
 
     @Override
     public void renderVideoLibrary(){
         String text = String.format(getString(R.string.about_connected), "hello");
-        videoBinding.aboutConnected.setText(text);
+        //videoBinding.aboutConnected.setText(text);
     }
     @Override
     public void onAttach(Context context) {
@@ -54,13 +58,36 @@ public class VideoFragment extends FragmentGlobalAbstract implements VideoContra
         videoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_video, container, false);
         videoBinding.setPresenter(presenter);
 
-        videoBinding.button2.setOnClickListener(view -> {
+        RecyclerView rv = videoBinding.videoListRecyclerView;
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getActivity());
+        rv.setLayoutManager(linearLayoutManager);
+
+        List<StoredVideoEntity> videoList = new ArrayList<>();
+        try {
+            videoList = (List<StoredVideoEntity>) new VideoDatabaseClient(getContext(), 0).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        videoListAdapter = new VideoListAdapter(videoList, (uid, fileName) -> {
+            Log.d("d", "we got it?");
+            //connect to starting the video activity here, with the filename!
+            Intent intent = new Intent(getContext(), VideoActivity.class);
+            intent.putExtra("fileName", fileName);
+            startActivity(intent);
+
+        });
+        rv.setAdapter(videoListAdapter);
+        
+        /*videoBinding.button2.setOnClickListener(view -> {
             Log.i("VIDEOLIB", "Trying to start worker");
 
             Intent intent = new Intent(getContext(), VideoActivity.class);
             startActivity(intent);
-        });
-        videoBinding.button3.setOnClickListener(view -> {
+        });*/
+        videoBinding.downloadAllButton.setOnClickListener(view -> {
             Log.i("button3", "we are in button 3 download terretory!");
             OneTimeWorkRequest uploadWorkRequest = new OneTimeWorkRequest.Builder(VideoDownloadWorker.class)
                     .build();
@@ -68,7 +95,7 @@ public class VideoFragment extends FragmentGlobalAbstract implements VideoContra
 
         });
 
-        videoBinding.button4.setOnClickListener(view -> {
+        videoBinding.getExistingButton.setOnClickListener(view -> {
             Log.d("stuff", "it's getting clicked!");
             try {
                 List<StoredVideoEntity> ents = (List<StoredVideoEntity>) new VideoDatabaseClient(getContext(), 0).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
@@ -80,7 +107,7 @@ public class VideoFragment extends FragmentGlobalAbstract implements VideoContra
             }
         });
 
-        videoBinding.button6.setOnClickListener(view -> {
+        videoBinding.deleteAllButton.setOnClickListener(view -> {
             new VideoDatabaseClient(getContext(), 2).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         });
 
