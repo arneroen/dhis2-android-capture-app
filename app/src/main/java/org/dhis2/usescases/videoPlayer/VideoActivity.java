@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.VideoView;
@@ -44,6 +45,7 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (savedInstanceState != null) {
             videoPos = savedInstanceState.getInt("videoPos");
         }
@@ -62,7 +64,13 @@ public class VideoActivity extends AppCompatActivity {
             trackInfos = mp.getTrackInfo();
             mediaPlayer = mp;
         });
-        MediaController controller = new MediaController(this);
+        MediaController controller = new MediaController(this){
+            @Override
+            public void show(){
+                super.show(0);
+            }
+        };
+
         controller.setMediaPlayer(mVideoView);
         mVideoView.setMediaController(controller);
     }
