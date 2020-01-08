@@ -44,7 +44,7 @@ public class VideoDownloadWorker extends Worker {
     @NonNull
     @Override
     public Result doWork(){
-        String server = "http://10.0.0.30:8081/";
+        String server = "http://192.168.12.1:8081/";
 
         try {
             URL videoListUrl = new URL(server + "/videos");

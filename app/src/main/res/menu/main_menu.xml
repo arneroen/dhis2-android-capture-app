@@ -34,7 +34,7 @@
         <item
             android:id="@+id/video_button"
             android:icon="@drawable/ic_menu_logout"
-            android:title="VIDEO PLACEHOLDER" />
+            android:title="@string/video_dashboard" />
         <item
             android:id="@+id/logout_button"
             android:icon="@drawable/ic_menu_logout"

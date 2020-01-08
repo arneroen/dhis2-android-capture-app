@@ -22,7 +22,6 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class VideoActivity extends AppCompatActivity {
 
-    private static final String VIDEO_SAMPLE = "tacoma_narrows";
     private VideoView mVideoView;
     private String videoFileName;
     private MediaPlayer mediaPlayer;

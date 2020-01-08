@@ -337,6 +337,9 @@
 
     <string name="downloaded_confirm">Do you want to add more data from QR?</string>
 
+    <!--VIDEO-->
+    <string name="video_dashboard">Video library</string>
+
     <!--ABOUT-->
     <string name="about_app">App Version: %s</string>
     <string name="about_sdk">SDK Version: %s</string>
