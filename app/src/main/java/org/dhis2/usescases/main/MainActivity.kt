@@ -252,7 +252,7 @@ class MainActivity : ActivityGlobalAbstract(), MainView, ExporterListener {
             }
             R.id.video_button -> {
                 activeFragment = VideoFragment()
-                tag = "Video test"
+                tag = getString(R.string.video_dashboard);
                 binding.filter.visibility = View.GONE
             }
             R.id.logout_button -> {

@@ -6,37 +6,71 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
 import org.dhis2.R;
-import org.dhis2.data.videoDatabase.VideoDatabaseClient;
-import org.dhis2.data.videoDatabase.entities.StoredVideoEntity;
 
 import java.io.File;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class VideoActivity extends AppCompatActivity {
 
-    private static final String VIDEO_SAMPLE = "tacoma_narrows";
     private VideoView mVideoView;
     private String videoFileName;
+    private MediaPlayer mediaPlayer;
+    private Button audioButton;
+    private MediaPlayer.TrackInfo[] trackInfos;
+    private int videoPos;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("videoPos", mVideoView.getCurrentPosition());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle inState) {
+        super.onRestoreInstanceState(inState);
+        videoPos = inState.getInt("videoPos");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (savedInstanceState != null) {
+            videoPos = savedInstanceState.getInt("videoPos");
+        }
         this.videoFileName = getIntent().getExtras().getString("fileName");
         setContentView(R.layout.activity_video);
         mVideoView = findViewById(R.id.videoview);
-        MediaController controller = new MediaController(this);
+        audioButton = findViewById(R.id.audioButton);
+
+        audioButton.setOnClickListener(view -> {
+            //mediaPlayer.selectTrack(2);
+            mediaPlayer.seekTo(2000);
+        });
+
+        mVideoView.setOnPreparedListener(mp -> {
+
+            trackInfos = mp.getTrackInfo();
+            mediaPlayer = mp;
+        });
+        MediaController controller = new MediaController(this){
+            @Override
+            public void show(){
+                super.show(0);
+            }
+        };
+
         controller.setMediaPlayer(mVideoView);
         mVideoView.setMediaController(controller);
     }
@@ -61,30 +95,15 @@ public class VideoActivity extends AppCompatActivity {
         }
     }
 
-    private Uri getMedia(String mediaName) {
-        return Uri.parse("android.resource://" + getPackageName() +
-                "/raw/" + mediaName);
-    }
     private void initializePlayer() {
-        String fileName = this.videoFileName;
-        /*String fileName;
-        try {
-            List<StoredVideoEntity> videos = (List<StoredVideoEntity>) new VideoDatabaseClient(this, 0).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
-            fileName = videos.get(0).getFileName();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            fileName = "test9.mp4";
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            fileName = "test9.mp4";
-        }*/
-        File file = new File(getExternalFilesDir(null).getAbsolutePath() + "/" + fileName);
+        File file = new File(getExternalFilesDir(null).getAbsolutePath() + "/" + videoFileName);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PERMISSION_GRANTED){
             Log.i("work", "we dont have permission?!");
             Uri uri = Uri.fromFile(file);
             mVideoView.setVideoPath(uri.getPath());
             mVideoView.start();
+            mVideoView.seekTo(videoPos);
         } else {
             Log.i("work", "we have permission");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 9909);
