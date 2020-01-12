@@ -44,7 +44,7 @@ public class VideoDownloadWorker extends Worker {
     @NonNull
     @Override
     public Result doWork(){
-        String server = "http://192.168.12.1:8081/";
+        String server = "http://192.168.12.1:8081";
 
         try {
             URL videoListUrl = new URL(server + "/videos");
@@ -149,7 +149,7 @@ public class VideoDownloadWorker extends Worker {
 
     private void downloadVideos(String server, List<StoredVideoEntity> videos) throws IOException {
         for (StoredVideoEntity video : videos) {
-            URL url = new URL(server + "video/" + video.getUid());
+            URL url = new URL(server + "/video/" + video.getUid());
 
             String[] fileNameSplit = video.getFileName().split("\\.");
             String fileName = video.getUid() + "." + fileNameSplit[fileNameSplit.length -1];

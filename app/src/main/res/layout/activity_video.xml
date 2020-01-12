@@ -21,6 +21,7 @@
         android:id="@+id/audioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/videoview"
         android:text="audio!!"
-        android:layout_below="@id/videoview"/>
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

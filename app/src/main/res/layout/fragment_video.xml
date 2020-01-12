@@ -36,19 +36,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="download all"
+                android:visibility="gone"
                 tools:layout_editor_absoluteX="114dp"
                 tools:layout_editor_absoluteY="-8dp" />
+
             <Button
                 android:id="@+id/getExistingButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="Get existing"
                 tools:layout_editor_absoluteX="114dp"
                 tools:layout_editor_absoluteY="-8dp" />
+
             <Button
                 android:id="@+id/deleteAllButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="Delete all!"
                 tools:layout_editor_absoluteX="114dp"
                 tools:layout_editor_absoluteY="-8dp" />
@@ -59,7 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_below="@+id/buttonLayout">
+            android:layout_below="@+id/buttonLayout"
+            android:layout_marginTop="10dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/videoListRecyclerView"
