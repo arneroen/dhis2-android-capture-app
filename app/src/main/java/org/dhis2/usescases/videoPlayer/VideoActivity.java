@@ -32,6 +32,7 @@ public class VideoActivity extends AppCompatActivity {
     private ImageView backArrow;
     private MediaPlayer.TrackInfo[] trackInfos;
     private int videoPos;
+    private boolean isFullscreen = true;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -75,6 +76,14 @@ public class VideoActivity extends AppCompatActivity {
             trackInfos = mp.getTrackInfo();
             mediaPlayer = mp;
         });
+        mVideoView.setOnClickListener(v -> {
+            if (!isFullscreen) {
+                mVideoView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+                isFullscreen = true;
+            } else isFullscreen = false;
+        });
+
         MediaController controller = new MediaController(this){
             @Override
             public void show(){
@@ -120,6 +129,8 @@ public class VideoActivity extends AppCompatActivity {
             Log.i("work", "we have permission");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 9909);
         }
+        mVideoView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+        | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
 
     }
