@@ -19,7 +19,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
 
     private List<StoredVideoEntity> videoList;
 
-    private OnThumbnailClickListener onThumbnailClickListener;
+    private OnRowClickListener onRowClickListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView titleText, descriptionText, languagesText;
@@ -34,9 +34,9 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
         }
     }
 
-    public VideoListAdapter(List<StoredVideoEntity> videoList, OnThumbnailClickListener onThumbnailClickListener) {
+    public VideoListAdapter(List<StoredVideoEntity> videoList, OnRowClickListener onRowClickListener) {
         this.videoList = videoList;
-        this.onThumbnailClickListener = onThumbnailClickListener;
+        this.onRowClickListener = onRowClickListener;
     }
 
     @NonNull
@@ -61,8 +61,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
         }
         holder.languagesText.setText(langsString);
 
-        holder.videoThumbnail.setOnClickListener(v -> {
-            onThumbnailClickListener.onThumbnailClicked(video.getUid(), video.getFileName());
+        holder.itemView.setOnClickListener(v -> {
+            onRowClickListener.onRowClicked(video.getUid(), video.getFileName());
         });
 
     }
@@ -72,7 +72,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
         return videoList.size();
     }
 
-    public interface OnThumbnailClickListener {
-        void onThumbnailClicked(String uid, String fileName);
+    public interface OnRowClickListener {
+        void onRowClicked(String uid, String fileName);
     }
 }
