@@ -21,12 +21,14 @@ public class StoredVideoEntityDeserializer implements JsonDeserializer<StoredVid
         JsonArray jsonLanguages = jsonObject.get("videoLanguages").getAsJsonArray();
 
         List<VideoLanguageEntity> languages = new ArrayList<>();
+        jsonLanguages.get(0).getAsJsonObject();
 
         for (int i = 0; i < jsonLanguages.size(); i++) {
             languages.add(new VideoLanguageEntity(
                     jsonObject.get("uid").getAsString(),
-                    jsonLanguages.get(i).getAsString(),
-                    i
+                    jsonLanguages.get(i).getAsJsonObject().get("languageName").getAsString(),
+                    jsonLanguages.get(i).getAsJsonObject().get("index").getAsInt()
+
             ));
         }
 

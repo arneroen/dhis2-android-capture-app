@@ -17,6 +17,8 @@ import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
+import com.google.gson.Gson;
+
 import org.dhis2.Components;
 import org.dhis2.R;
 import org.dhis2.data.service.VideoDownloadWorker;
@@ -71,11 +73,12 @@ public class VideoFragment extends FragmentGlobalAbstract implements VideoContra
             e.printStackTrace();
         }
 
-        videoListAdapter = new VideoListAdapter(videoList, (uid, fileName) -> {
+        videoListAdapter = new VideoListAdapter(videoList, (uid, fileName, languages) -> {
             Log.d("d", "we got it?");
             //connect to starting the video activity here, with the filename!
             Intent intent = new Intent(getContext(), VideoActivity.class);
             intent.putExtra("fileName", fileName);
+            intent.putExtra("languages", (new Gson()).toJson(languages));
             startActivity(intent);
 
         });

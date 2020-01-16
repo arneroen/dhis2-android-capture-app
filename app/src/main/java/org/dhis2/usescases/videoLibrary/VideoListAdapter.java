@@ -67,8 +67,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
         langsString = "Languages: " + langsString;
         holder.languagesText.setText(langsString);
 
-        holder.itemView.setOnClickListener(v -> {
-            onRowClickListener.onRowClicked(video.getUid(), video.getFileName());
+        holder.videoThumbnail.setOnClickListener(v -> {
+            onRowClickListener.onThumbnailClicked(video.getUid(), video.getFileName(), video.getVideoLanguages());
         });
 
     }
@@ -79,6 +79,6 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
     }
 
     public interface OnRowClickListener {
-        void onRowClicked(String uid, String fileName);
+        void onThumbnailClicked(String uid, String fileName, List<VideoLanguageEntity> languages);
     }
 }
