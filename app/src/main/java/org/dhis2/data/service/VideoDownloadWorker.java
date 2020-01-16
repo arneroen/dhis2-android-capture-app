@@ -1,6 +1,7 @@
 package org.dhis2.data.service;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
@@ -44,7 +46,11 @@ public class VideoDownloadWorker extends Worker {
     @NonNull
     @Override
     public Result doWork(){
-        String server = "http://192.168.12.1:8081";
+        Properties properties = getConfigValue(getApplicationContext());
+        if (properties == null || properties.getProperty("library_url") == null) {
+            return Result.failure();
+        }
+        String server = properties.get("library_url").toString();
 
         try {
             URL videoListUrl = new URL(server + "/videos");
@@ -169,6 +175,18 @@ public class VideoDownloadWorker extends Worker {
     private void downloadThumbnail(String server, StoredVideoEntity video) throws IOException {
         URL url = new URL(server + "/thumbnail/" + video.getUid());
         downloadVideo(url, video.getThumbnailFileName());
+    }
+    private Properties getConfigValue(Context context) {
+        AssetManager assetManager = context.getAssets();
+        Properties properties = new Properties();
+        try {
+            InputStream inputStream = assetManager.open("videoServer.properties");
+            properties.load(inputStream);
+            return properties;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
 
