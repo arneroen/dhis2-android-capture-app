@@ -11,8 +11,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -27,6 +29,7 @@ public class VideoActivity extends AppCompatActivity {
     private String videoFileName;
     private MediaPlayer mediaPlayer;
     private Button audioButton;
+    private ImageView backArrow;
     private MediaPlayer.TrackInfo[] trackInfos;
     private int videoPos;
 
@@ -53,10 +56,18 @@ public class VideoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_video);
         mVideoView = findViewById(R.id.videoview);
         audioButton = findViewById(R.id.audioButton);
+        backArrow = findViewById(R.id.backArrow);
 
         audioButton.setOnClickListener(view -> {
             //mediaPlayer.selectTrack(2);
             mediaPlayer.seekTo(2000);
+        });
+
+        backArrow.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Log.i("Back_Button", "Button was clicked");
+                finish();
+            }
         });
 
         mVideoView.setOnPreparedListener(mp -> {
@@ -74,6 +85,7 @@ public class VideoActivity extends AppCompatActivity {
         controller.setMediaPlayer(mVideoView);
         mVideoView.setMediaController(controller);
     }
+
 
     @Override
     protected void onStart() {
