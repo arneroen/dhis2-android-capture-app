@@ -8,6 +8,8 @@ rm -rf dhis2-android-sdk/
 git submodule update
 ```
 
+Then, change the configuration in `/app/src/main/assets/videoServer.properties` to reflect your setup.
+
 Then, create a file called `build.gradle` in the `dhis2-rule-engine/`-folder, and add the following to it: 
 ```
 apply plugin: 'java'
