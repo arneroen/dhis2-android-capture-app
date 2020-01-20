@@ -38,6 +38,7 @@ public class StoredVideoEntityDeserializer implements JsonDeserializer<StoredVid
                 jsonObject.get("fileName").getAsString(),
                 jsonObject.get("description").getAsString(),
                 jsonObject.get("version").getAsInt(),
+                jsonObject.get("thumbnailFileName").getAsString(),
                 languages
         );
     }

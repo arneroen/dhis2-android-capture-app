@@ -154,10 +154,21 @@ public class VideoDownloadWorker extends Worker {
             String[] fileNameSplit = video.getFileName().split("\\.");
             String fileName = video.getUid() + "." + fileNameSplit[fileNameSplit.length -1];
             video.setFileName(fileName);
+
+            String[] thumbnailFileNameSplit = video.getThumbnailFileName().split("\\.");
+            String thumbnailFileName = video.getUid() + "." + thumbnailFileNameSplit[thumbnailFileNameSplit.length -1];
+            video.setThumbnailFileName(thumbnailFileName);
+
             downloadVideo(url, video.getFileName());
+            downloadThumbnail(server, video);
+
 
             new VideoDatabaseClient(getApplicationContext(), 1).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, video);
         }
+    }
+    private void downloadThumbnail(String server, StoredVideoEntity video) throws IOException {
+        URL url = new URL(server + "/thumbnail/" + video.getUid());
+        downloadVideo(url, video.getThumbnailFileName());
     }
 }
 

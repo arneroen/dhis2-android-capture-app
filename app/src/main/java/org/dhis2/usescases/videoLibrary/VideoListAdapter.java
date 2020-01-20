@@ -1,5 +1,7 @@
 package org.dhis2.usescases.videoLibrary;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView titleText, descriptionText, languagesText;
         public ImageView videoThumbnail;
+        private ImageView thumbnail;
+        private View currentView;
 
         public MyViewHolder(View view){
             super(view);
@@ -32,6 +36,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
             descriptionText = view.findViewById(R.id.video_description);
             videoThumbnail = view.findViewById(R.id.video_thumbnail);
             languagesText = view.findViewById(R.id.video_languages);
+            thumbnail = view.findViewById(R.id.video_thumbnail);
+            this.currentView = view;
         }
     }
 
@@ -67,6 +73,10 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
         langsString = "Languages: " + langsString;
         holder.languagesText.setText(langsString);
 
+        if (video.getThumbnailFileName() != null && !video.getThumbnailFileName().equalsIgnoreCase("")) {
+            Bitmap thumbnailBitmap = BitmapFactory.decodeFile(holder.currentView.getContext().getExternalFilesDir(null).getAbsolutePath() + "/" + video.getThumbnailFileName());
+            holder.videoThumbnail.setImageBitmap(thumbnailBitmap);
+        }
         holder.videoThumbnail.setOnClickListener(v -> {
             onRowClickListener.onThumbnailClicked(video.getUid(), video.getFileName(), video.getVideoLanguages());
         });

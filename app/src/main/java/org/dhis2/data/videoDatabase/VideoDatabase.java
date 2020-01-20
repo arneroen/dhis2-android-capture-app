@@ -8,7 +8,7 @@ import org.dhis2.data.videoDatabase.daos.VideoLanguageDao;
 import org.dhis2.data.videoDatabase.entities.StoredVideoEntity;
 import org.dhis2.data.videoDatabase.entities.VideoLanguageEntity;
 
-@Database(entities = {StoredVideoEntity.class, VideoLanguageEntity.class}, version = 3)
+@Database(entities = {StoredVideoEntity.class, VideoLanguageEntity.class}, version = 4)
 public abstract class VideoDatabase extends RoomDatabase {
     public abstract StoredVideoDao storedVideoDao();
     public abstract VideoLanguageDao videoLanguageDao();

@@ -41,7 +41,7 @@ public class VideoFragment extends FragmentGlobalAbstract implements VideoContra
 
     private FragmentVideoBinding videoBinding;
     private VideoListAdapter videoListAdapter;
-
+    
     @Override
     public void renderVideoLibrary(){
         String text = String.format(getString(R.string.about_connected), "hello");
