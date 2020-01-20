@@ -33,23 +33,28 @@ public class StoredVideoEntity {
     @ColumnInfo(name = "version")
     public int version;
 
+    @ColumnInfo(name = "thumbnail_file_name")
+    public String thumbnailFileName;
+
     @Ignore
     public List<VideoLanguageEntity> videoLanguages;
 
-    public StoredVideoEntity(String uid, String videoTitle, String fileName, String description, int version) {
+    public StoredVideoEntity(String uid, String videoTitle, String fileName, String description, int version, String thumbnailFileName) {
         this.uid = uid;
         this.videoTitle = videoTitle;
         this.fileName = fileName;
         this.description = description;
         this.version = version;
+        this.thumbnailFileName = thumbnailFileName;
     }
-    public StoredVideoEntity(String uid, String videoTitle, String fileName, String description, int version, List<VideoLanguageEntity> videoLanguages) {
+    public StoredVideoEntity(String uid, String videoTitle, String fileName, String description, int version, String thumbnailFileName, List<VideoLanguageEntity> videoLanguages) {
         this.uid = uid;
         this.videoTitle = videoTitle;
         this.fileName = fileName;
         this.videoLanguages = videoLanguages;
         this.description = description;
         this.version = version;
+        this.thumbnailFileName = thumbnailFileName;
     }
 
     public String getUid() { return uid; }
@@ -62,6 +67,10 @@ public class StoredVideoEntity {
 
     public String getDescription() { return description; }
 
+    public String getThumbnailFileName() {
+        return thumbnailFileName;
+    }
+
 
     public int getVersion() { return version; }
 
@@ -71,6 +80,10 @@ public class StoredVideoEntity {
 
     public void setVideoLanguages(List<VideoLanguageEntity> videoLanguages) {
         this.videoLanguages = videoLanguages;
+    }
+
+    public void setThumbnailFileName(String thumnailFileName) {
+        this.thumbnailFileName = thumnailFileName;
     }
 
     @Override
