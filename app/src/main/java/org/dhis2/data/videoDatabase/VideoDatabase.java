@@ -4,9 +4,12 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
 import org.dhis2.data.videoDatabase.daos.StoredVideoDao;
+import org.dhis2.data.videoDatabase.daos.VideoLanguageDao;
 import org.dhis2.data.videoDatabase.entities.StoredVideoEntity;
+import org.dhis2.data.videoDatabase.entities.VideoLanguageEntity;
 
-@Database(entities = {StoredVideoEntity.class}, version = 1)
+@Database(entities = {StoredVideoEntity.class, VideoLanguageEntity.class}, version = 3)
 public abstract class VideoDatabase extends RoomDatabase {
     public abstract StoredVideoDao storedVideoDao();
+    public abstract VideoLanguageDao videoLanguageDao();
 }

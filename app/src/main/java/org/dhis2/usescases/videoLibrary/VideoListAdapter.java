@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.dhis2.R;
 import org.dhis2.data.videoDatabase.entities.StoredVideoEntity;
+import org.dhis2.data.videoDatabase.entities.VideoLanguageEntity;
 
 import java.util.List;
 
@@ -54,15 +55,20 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
         holder.titleText.setText(video.getVideoTitle());
         holder.descriptionText.setText(video.getDescription());
 
-        String[] langs = video.getVideoLanguages().split(",");
-        String langsString = "Languages: ";
-        for (String lang : langs){
-            langsString += lang + ", ";
+        List<VideoLanguageEntity> langs = video.getVideoLanguages();
+        String langsString = "";
+
+        for (VideoLanguageEntity lang : langs){
+            if (!langsString.equalsIgnoreCase("")){
+                langsString += ", ";
+            }
+            langsString += lang.getLanguageName();
         }
+        langsString = "Languages: " + langsString;
         holder.languagesText.setText(langsString);
 
-        holder.itemView.setOnClickListener(v -> {
-            onRowClickListener.onRowClicked(video.getUid(), video.getFileName());
+        holder.videoThumbnail.setOnClickListener(v -> {
+            onRowClickListener.onThumbnailClicked(video.getUid(), video.getFileName(), video.getVideoLanguages());
         });
 
     }
@@ -73,6 +79,6 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
     }
 
     public interface OnRowClickListener {
-        void onRowClicked(String uid, String fileName);
+        void onThumbnailClicked(String uid, String fileName, List<VideoLanguageEntity> languages);
     }
 }
