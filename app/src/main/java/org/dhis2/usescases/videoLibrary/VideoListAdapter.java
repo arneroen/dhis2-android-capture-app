@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,13 +18,24 @@ import org.dhis2.R;
 import org.dhis2.data.videoDatabase.entities.StoredVideoEntity;
 import org.dhis2.data.videoDatabase.entities.VideoLanguageEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyViewHolder> {
+public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyViewHolder> implements Filterable {
 
-    private List<StoredVideoEntity> videoList;
+    private VideoSearchFilter filter;
+    private List<StoredVideoEntity> originalVideoList;
+    public List<StoredVideoEntity> videoList;
 
     private OnRowClickListener onRowClickListener;
+
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new VideoSearchFilter(this, originalVideoList);
+        }
+        return filter;
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView titleText, descriptionText, languagesText;
@@ -42,7 +55,9 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
     }
 
     public VideoListAdapter(List<StoredVideoEntity> videoList, OnRowClickListener onRowClickListener) {
-        this.videoList = videoList;
+        this.originalVideoList = videoList;
+        this.videoList = new ArrayList<>();
+        this.videoList.addAll(videoList);
         this.onRowClickListener = onRowClickListener;
     }
 

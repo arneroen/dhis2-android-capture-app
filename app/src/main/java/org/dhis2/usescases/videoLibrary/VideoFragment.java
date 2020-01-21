@@ -1,19 +1,22 @@
 package org.dhis2.usescases.videoLibrary;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
@@ -44,8 +47,6 @@ public class VideoFragment extends FragmentGlobalAbstract implements VideoContra
     
     @Override
     public void renderVideoLibrary(){
-        String text = String.format(getString(R.string.about_connected), "hello");
-        //videoBinding.aboutConnected.setText(text);
     }
     @Override
     public void onAttach(Context context) {
@@ -83,19 +84,38 @@ public class VideoFragment extends FragmentGlobalAbstract implements VideoContra
 
         });
         rv.setAdapter(videoListAdapter);
-        
-        /*videoBinding.button2.setOnClickListener(view -> {
-            Log.i("VIDEOLIB", "Trying to start worker");
 
-            Intent intent = new Intent(getContext(), VideoActivity.class);
-            startActivity(intent);
-        });*/
+        videoBinding.searchText.setOnTouchListener((v, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_UP && event.getRawX() >= (videoBinding.searchText.getRight() - videoBinding.searchText.getCompoundDrawables()[2].getBounds().width())) {
+                videoBinding.searchText.setText(new char[0], 0, 0);
+                videoListAdapter.getFilter().filter("");
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                return true;
+            }
+            return false;
+        });
+
+        videoBinding.searchButton.setOnClickListener(view -> {
+            String searchText = videoBinding.searchText.getText().toString();
+            videoListAdapter.getFilter().filter(searchText);
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        });
+
+        videoBinding.searchText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                videoBinding.searchButton.performClick();
+                return true;
+            }
+            return false;
+        });
+
         videoBinding.downloadAllButton.setOnClickListener(view -> {
             Log.i("button3", "we are in button 3 download terretory!");
             OneTimeWorkRequest uploadWorkRequest = new OneTimeWorkRequest.Builder(VideoDownloadWorker.class)
                     .build();
             WorkManager.getInstance(getContext()).enqueue(uploadWorkRequest);
-
         });
 
         videoBinding.getExistingButton.setOnClickListener(view -> {
