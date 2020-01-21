@@ -47,6 +47,7 @@ public class VideoActivity extends AppCompatActivity {
     private LinearLayout languageSelect;
     private int numAudioTracks;
     private LinearLayout toolbar;
+    private LinearLayout clickForControls;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -86,6 +87,7 @@ public class VideoActivity extends AppCompatActivity {
         languageSelect = findViewById(R.id.languageSelect);
         backArrow = findViewById(R.id.backArrow);
         toolbar = findViewById(R.id.toolbar);
+        clickForControls = findViewById(R.id.clickForControls);
 
         playButton.setOnClickListener(v -> {
             TrackPosition trackPosition = (TrackPosition) dropdown.getSelectedItem();
@@ -93,7 +95,9 @@ public class VideoActivity extends AppCompatActivity {
             languageSelect.setVisibility(View.GONE);
             mediaPlayer.selectTrack(trackPosition.getMpPosition());
             mVideoView.start();
+            displayHelpText();
         });
+
 
 
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -136,10 +140,12 @@ public class VideoActivity extends AppCompatActivity {
             if (numAudioTracks <= 1) {
                 languageSelect.setVisibility(View.GONE);
                 mVideoView.start();
+                displayHelpText();
             } else if (selectedLang != null) {
                 languageSelect.setVisibility(View.GONE);
                 mediaPlayer.selectTrack(selectedLang.getMpPosition());
                 mVideoView.start();
+                displayHelpText();
             }
         });
         mVideoView.setOnClickListener(v -> {
@@ -214,6 +220,25 @@ public class VideoActivity extends AppCompatActivity {
         if (requestCode == 9909 && grantResults[0] == PERMISSION_GRANTED) {
             initializePlayer();
         }
+    }
+
+    private void displayHelpText(){
+        clickForControls.setVisibility(View.VISIBLE);
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                }
+
+                runOnUiThread(() -> {
+                    clickForControls.setVisibility(View.GONE);
+                });
+            }
+        };
+        thread.start();
+
     }
 
     private final class TrackPosition {
