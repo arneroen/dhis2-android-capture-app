@@ -30,7 +30,7 @@ public class VideoSearchFilter extends Filter {
         else {
             final String filterPattern = constraint.toString().toLowerCase().trim();
             for (StoredVideoEntity videoEntity : originalList) {
-                if (videoEntity.getVideoTitle().toLowerCase().contains(filterPattern)) {
+                if (searchFilterMatch(videoEntity, filterPattern)) {
                     filteredList.add(videoEntity);
                 }
             }
@@ -46,8 +46,13 @@ public class VideoSearchFilter extends Filter {
         adapter.videoList.clear();
         adapter.videoList.addAll((List<StoredVideoEntity>) results.values);
         adapter.notifyDataSetChanged();
+    }
 
-
-
+    private boolean searchFilterMatch(StoredVideoEntity storedVideoEntity, String constraint) {
+        return (
+                storedVideoEntity.getVideoTitle().toLowerCase().contains(constraint)
+                || storedVideoEntity.getDescription().toLowerCase().contains(constraint)
+                || storedVideoEntity.getTags().toLowerCase().contains(constraint)
+        );
     }
 }
