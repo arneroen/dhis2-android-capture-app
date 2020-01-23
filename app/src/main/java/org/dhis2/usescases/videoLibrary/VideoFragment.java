@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
@@ -130,8 +131,23 @@ public class VideoFragment extends FragmentGlobalAbstract implements VideoContra
             }
         });
 
+
         videoBinding.deleteAllButton.setOnClickListener(view -> {
             new VideoDatabaseClient(getContext(), 2).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        });
+
+        videoBinding.searchLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                videoBinding.searchLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                float buttonWidth = videoBinding.searchButton.getWidth();
+                float layoutWidth = videoBinding.searchLayout.getWidth();
+                float searchWidth = layoutWidth - buttonWidth;
+                ViewGroup.LayoutParams params = videoBinding.searchText.getLayoutParams();
+                params.width = (int) Math.floor((double) searchWidth);
+                videoBinding.searchText.setLayoutParams(params);
+            }
         });
 
 
