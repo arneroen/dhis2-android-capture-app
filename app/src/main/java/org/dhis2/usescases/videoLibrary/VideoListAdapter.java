@@ -77,8 +77,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
             Bitmap thumbnailBitmap = BitmapFactory.decodeFile(holder.currentView.getContext().getExternalFilesDir(null).getAbsolutePath() + "/" + video.getThumbnailFileName());
             holder.videoThumbnail.setImageBitmap(thumbnailBitmap);
         }
-        holder.videoThumbnail.setOnClickListener(v -> {
-            onRowClickListener.onThumbnailClicked(video.getUid(), video.getFileName(), video.getVideoLanguages());
+        holder.itemView.setOnClickListener(v -> {
+            onRowClickListener.onRowClicked(video.getUid(), video.getFileName(), video.getVideoLanguages());
         });
 
     }
@@ -89,6 +89,6 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
     }
 
     public interface OnRowClickListener {
-        void onThumbnailClicked(String uid, String fileName, List<VideoLanguageEntity> languages);
+        void onRowClicked(String uid, String fileName, List<VideoLanguageEntity> languages);
     }
 }
