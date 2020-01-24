@@ -36,25 +36,29 @@ public class StoredVideoEntity {
     @ColumnInfo(name = "thumbnail_file_name")
     public String thumbnailFileName;
 
+    public String tags;
+
     @Ignore
     public List<VideoLanguageEntity> videoLanguages;
 
-    public StoredVideoEntity(String uid, String videoTitle, String fileName, String description, int version, String thumbnailFileName) {
+    public StoredVideoEntity(String uid, String videoTitle, String fileName, String description, int version, String thumbnailFileName, String tags) {
         this.uid = uid;
         this.videoTitle = videoTitle;
         this.fileName = fileName;
         this.description = description;
         this.version = version;
         this.thumbnailFileName = thumbnailFileName;
+        this.tags = tags;
     }
-    public StoredVideoEntity(String uid, String videoTitle, String fileName, String description, int version, String thumbnailFileName, List<VideoLanguageEntity> videoLanguages) {
+    public StoredVideoEntity(String uid, String videoTitle, String fileName, String description, int version, String thumbnailFileName, String tags, List<VideoLanguageEntity> videoLanguages) {
         this.uid = uid;
         this.videoTitle = videoTitle;
         this.fileName = fileName;
-        this.videoLanguages = videoLanguages;
         this.description = description;
         this.version = version;
         this.thumbnailFileName = thumbnailFileName;
+        this.tags = tags;
+        this.videoLanguages = videoLanguages;
     }
 
     public String getUid() { return uid; }
@@ -71,8 +75,11 @@ public class StoredVideoEntity {
         return thumbnailFileName;
     }
 
-
     public int getVersion() { return version; }
+
+    public String getTags() {
+        return tags;
+    }
 
     public void setFileName(String fileName) { this.fileName = fileName; }
 
