@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:hint="Search"
+                    android:hint="Click here to search"
                     android:drawableRight="@drawable/ic_close"
                     android:imeOptions="actionDone"/>
                 <Button
