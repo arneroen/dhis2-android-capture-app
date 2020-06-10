@@ -1,9 +1,13 @@
 package org.dhis2.usescases.videoLibrary;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,18 +16,32 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.dhis2.R;
 import org.dhis2.data.videoDatabase.entities.StoredVideoEntity;
+import org.dhis2.data.videoDatabase.entities.VideoLanguageEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyViewHolder> {
+public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyViewHolder> implements Filterable {
 
-    private List<StoredVideoEntity> videoList;
+    private VideoSearchFilter filter;
+    private List<StoredVideoEntity> originalVideoList;
+    public List<StoredVideoEntity> videoList;
 
-    private OnThumbnailClickListener onThumbnailClickListener;
+    private OnRowClickListener onRowClickListener;
+
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new VideoSearchFilter(this, originalVideoList);
+        }
+        return filter;
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView titleText, descriptionText, languagesText;
         public ImageView videoThumbnail;
+        private ImageView thumbnail;
+        private View currentView;
 
         public MyViewHolder(View view){
             super(view);
@@ -31,12 +49,16 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
             descriptionText = view.findViewById(R.id.video_description);
             videoThumbnail = view.findViewById(R.id.video_thumbnail);
             languagesText = view.findViewById(R.id.video_languages);
+            thumbnail = view.findViewById(R.id.video_thumbnail);
+            this.currentView = view;
         }
     }
 
-    public VideoListAdapter(List<StoredVideoEntity> videoList, OnThumbnailClickListener onThumbnailClickListener) {
-        this.videoList = videoList;
-        this.onThumbnailClickListener = onThumbnailClickListener;
+    public VideoListAdapter(List<StoredVideoEntity> videoList, OnRowClickListener onRowClickListener) {
+        this.originalVideoList = videoList;
+        this.videoList = new ArrayList<>();
+        this.videoList.addAll(videoList);
+        this.onRowClickListener = onRowClickListener;
     }
 
     @NonNull
@@ -54,15 +76,24 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
         holder.titleText.setText(video.getVideoTitle());
         holder.descriptionText.setText(video.getDescription());
 
-        String[] langs = video.getVideoLanguages().split(",");
-        String langsString = "Languages: ";
-        for (String lang : langs){
-            langsString += lang + ", ";
+        List<VideoLanguageEntity> langs = video.getVideoLanguages();
+        String langsString = "";
+
+        for (VideoLanguageEntity lang : langs){
+            if (!langsString.equalsIgnoreCase("")){
+                langsString += ", ";
+            }
+            langsString += lang.getLanguageName();
         }
+        langsString = "Languages: " + langsString;
         holder.languagesText.setText(langsString);
 
-        holder.videoThumbnail.setOnClickListener(v -> {
-            onThumbnailClickListener.onThumbnailClicked(video.getUid(), video.getFileName());
+        if (video.getThumbnailFileName() != null && !video.getThumbnailFileName().equalsIgnoreCase("")) {
+            Bitmap thumbnailBitmap = BitmapFactory.decodeFile(holder.currentView.getContext().getExternalFilesDir(null).getAbsolutePath() + "/" + video.getThumbnailFileName());
+            holder.videoThumbnail.setImageBitmap(thumbnailBitmap);
+        }
+        holder.itemView.setOnClickListener(v -> {
+            onRowClickListener.onRowClicked(video.getUid(), video.getFileName(), video.getVideoLanguages());
         });
 
     }
@@ -72,7 +103,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.MyVi
         return videoList.size();
     }
 
-    public interface OnThumbnailClickListener {
-        void onThumbnailClicked(String uid, String fileName);
+    public interface OnRowClickListener {
+        void onRowClicked(String uid, String fileName, List<VideoLanguageEntity> languages);
     }
 }

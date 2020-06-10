@@ -8,7 +8,9 @@ public class VideoDatabaseInstance {
     private VideoDatabase videoDatabase;
 
     private VideoDatabaseInstance(Context context) {
-        videoDatabase = Room.databaseBuilder(context, VideoDatabase.class, "video-database").build();
+        videoDatabase = Room.databaseBuilder(context, VideoDatabase.class, "video-database")
+                .fallbackToDestructiveMigration()
+                .build();
     }
 
     public static synchronized VideoDatabaseInstance getInstance(Context context) {

@@ -3,9 +3,15 @@ package org.dhis2.data.videoDatabase.entities;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.JsonAdapter;
+
+import java.util.List;
+
 @Entity
+@JsonAdapter(StoredVideoEntityDeserializer.class)
 public class StoredVideoEntity {
 
     @NonNull
@@ -20,9 +26,6 @@ public class StoredVideoEntity {
     @ColumnInfo(name = "file_name")
     public String fileName;
 
-    @ColumnInfo(name = "video_languages")
-    public String videoLanguages;
-
     @ColumnInfo(name = "description")
     public String description;
 
@@ -30,13 +33,32 @@ public class StoredVideoEntity {
     @ColumnInfo(name = "version")
     public int version;
 
-    public StoredVideoEntity(String uid, String videoTitle, String fileName, String videoLanguages, String description, int version) {
+    @ColumnInfo(name = "thumbnail_file_name")
+    public String thumbnailFileName;
+
+    public String tags;
+
+    @Ignore
+    public List<VideoLanguageEntity> videoLanguages;
+
+    public StoredVideoEntity(String uid, String videoTitle, String fileName, String description, int version, String thumbnailFileName, String tags) {
         this.uid = uid;
         this.videoTitle = videoTitle;
         this.fileName = fileName;
-        this.videoLanguages = videoLanguages;
         this.description = description;
         this.version = version;
+        this.thumbnailFileName = thumbnailFileName;
+        this.tags = tags;
+    }
+    public StoredVideoEntity(String uid, String videoTitle, String fileName, String description, int version, String thumbnailFileName, String tags, List<VideoLanguageEntity> videoLanguages) {
+        this.uid = uid;
+        this.videoTitle = videoTitle;
+        this.fileName = fileName;
+        this.description = description;
+        this.version = version;
+        this.thumbnailFileName = thumbnailFileName;
+        this.tags = tags;
+        this.videoLanguages = videoLanguages;
     }
 
     public String getUid() { return uid; }
@@ -45,15 +67,31 @@ public class StoredVideoEntity {
 
     public String getFileName() { return fileName; }
 
-    public String getVideoLanguages() { return videoLanguages; }
+    public List<VideoLanguageEntity> getVideoLanguages() { return videoLanguages; }
 
     public String getDescription() { return description; }
 
+    public String getThumbnailFileName() {
+        return thumbnailFileName;
+    }
+
     public int getVersion() { return version; }
+
+    public String getTags() {
+        return tags;
+    }
 
     public void setFileName(String fileName) { this.fileName = fileName; }
 
     public void setUid(String uid) { this.uid = uid; }
+
+    public void setVideoLanguages(List<VideoLanguageEntity> videoLanguages) {
+        this.videoLanguages = videoLanguages;
+    }
+
+    public void setThumbnailFileName(String thumnailFileName) {
+        this.thumbnailFileName = thumnailFileName;
+    }
 
     @Override
     public boolean equals(Object other){

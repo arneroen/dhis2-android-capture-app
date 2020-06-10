@@ -16,6 +16,7 @@
         android:background="@android:color/white">
 
         <ImageView
+            android:id="@+id/videoThumbnail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
@@ -35,8 +36,8 @@
                 android:id="@+id/downloadAllButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="download all"
                 android:visibility="gone"
+                android:text="download all"
                 tools:layout_editor_absoluteX="114dp"
                 tools:layout_editor_absoluteY="-8dp" />
 
@@ -66,6 +67,26 @@
             android:orientation="vertical"
             android:layout_below="@+id/buttonLayout"
             android:layout_marginTop="10dp">
+            <LinearLayout
+                android:id="@+id/searchLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/searchText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:hint="Click here to search"
+                    android:drawableRight="@drawable/ic_close"
+                    android:imeOptions="actionDone"/>
+                <Button
+                    android:id="@+id/searchButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Search" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/videoListRecyclerView"
